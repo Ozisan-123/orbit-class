@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.orbit</groupId>
+    <artifactId>orbit-parent</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>orbit-common</artifactId>
+  <name>orbit-common</name>
+  <description>共享异常、错误码、通用 DTO、多租户上下文</description>
+
+  <dependencies>
+    <!--
+      刻意只引 spring-web 而非 spring-boot-starter-web：
+      后者会带进 Servlet 容器，与 WebFlux 网关冲突。
+    -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-validation</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+    </dependency>
+
+    <!--
+      servlet API 用 provided：**只在编译期需要**。
+      原因：spring-web 的 HttpRequestMethodNotSupportedException 继承自
+      jakarta.servlet.ServletException，处理 405 时绕不开这个类型。
+
+      ⚠ 必须是 provided 而不是 compile —— provided **不传递给下游**，
+      所以 orbit-gateway（WebFlux）不会因此被带进 Servlet 栈，
+      上面那条「只引 spring-web」的约束依然成立。
+      运行期由 Servlet 容器（Tomcat）提供。
+    -->
+    <dependency>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <!--
+      JWT：两个服务都要**校验** token（academic 签发，scheduling 也要认），
+      所以放在 common 里而不是 academic。
+
+      ⚠ 注意这是**标准 JWT（HS256）**，不是 Python 侧那种自定义 HMAC 格式。
+      两者不通用是**有意的**：token 对前端不透明（只存 localStorage、原样回传），
+      格式不参与契约。代价是灰度切换时老 token 失效、用户需重新登录一次 ——
+      已在方案 §15「P1 边界澄清」记录。
+    -->
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt-api</artifactId>
+      <version>${jjwt.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt-impl</artifactId>
+      <version>${jjwt.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt-jackson</artifactId>
+      <version>${jjwt.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+</project>

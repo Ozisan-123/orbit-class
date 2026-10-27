@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.orbit</groupId>
+    <artifactId>orbit-parent</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>orbit-solver-worker</artifactId>
+  <name>orbit-solver-worker</name>
+  <description>求解工作进程：轮询派单、建模求解、心跳上报、结果回传</description>
+
+  <dependencies>
+    <!-- 求解内核（含 CP-SAT 建模与 RuleContext） -->
+    <dependency>
+      <groupId>com.orbit</groupId>
+      <artifactId>orbit-solver-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <!--
+      刻意不依赖：orbit-common、orbit-academic、orbit-scheduling、MySQL、MyBatis、Flyway。
+      本进程只通过 HTTP 与 orbit-scheduling 通信：
+        拉快照 / 拉规则集 / 领任务 / 报心跳 / 回结果
+      用依赖隔离强制"求解进程不碰数据库"这条架构约束。
+
+      spring-boot-starter-web 仅用于 RestClient，
+      同时保留一个内部端口给 /actuator/health 与 /metrics 供 Prometheus 抓取。
+    -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <!--
+      ⚠⚠ 这个依赖**不能省**（P3 实测踩到）。
+
+      `RestClient.Builder` 这个 bean 由 `spring-boot-restclient` 提供，而
+      `spring-boot-starter-web` **不包含它**（Boot 4 把自动配置按模块拆开了）。
+      少了它的后果很具体：
+
+        1. 构造注入 `RestClient.Builder` → 启动直接失败
+           "required a bean of type 'RestClient$Builder' that could not be found"
+        2. 于是改用静态工厂 `RestClient.builder()` → 能启动了，但那个 Builder 是**裸的**，
+           **不带 `spring.jackson.*` 配的 ObjectMapper** →
+           发出去的 JSON 是 snake_case，而 worker 的 record 字段是 camelCase →
+           匹配不上 → 传给 primitive 参数的是 null →
+           `Cannot map 'null' into type 'long'`
+
+      这一类问题很难查：服务能启动、能连上、能领到任务，只是**读不懂响应**。
+    -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-restclient</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-validation</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+</project>

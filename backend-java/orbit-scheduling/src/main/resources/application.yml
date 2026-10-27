@@ -1,0 +1,61 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: orbit-scheduling
+  datasource:
+    # ⚠ characterEncoding 必须是 Java 字符集名（UTF-8），不是 MySQL 的 utf8mb4
+    url: jdbc:mysql://${MYSQL_HOST:127.0.0.1}:${MYSQL_PORT:3306}/${MYSQL_DATABASE:orbit_schedule}?useUnicode=true&characterEncoding=UTF-8&connectionCollation=utf8mb4_0900_ai_ci&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: ${MYSQL_USER:orbit}
+    password: ${MYSQL_PASSWORD:orbit_change_me}
+    hikari:
+      pool-name: scheduling-pool
+      maximum-pool-size: 20
+  data:
+    redis:
+      url: ${REDIS_URL:redis://127.0.0.1:6379/0}
+  flyway:
+    table: flyway_schema_history_scheduling
+    locations: classpath:db/migration/scheduling
+    # ⚠ 前置依赖：本服务的 V1 引用了 academic 的 5 张表（16 个外键），
+    #   所以 **academic 必须先启动完成迁移**，否则这里会因外键指向不存在的表而失败。
+    #   这是共享库 + 按属主拆表的固有代价，选择"响亮地失败"而不是关掉外键检查。
+    #
+    # ⚠ baseline-on-migrate + baseline-version: 0 的含义与理由见 academic 的同名配置：
+    #   关掉它会被安全检查拒绝启动；用默认的 baseline-version: 1 会静默跳过 V1。
+    baseline-on-migrate: true
+    baseline-version: 0
+    baseline-description: "pre-existing shared schema (academic owns those tables)"
+  jackson:
+    # ⚠ 与 academic 保持完全一致。这两条直接决定对外契约：
+    #   always   —— Python 侧**包含 null 字段**（如 "published_by":null），写 non_null 会悄悄删掉
+    #   SNAKE_CASE —— version_no / entry_count / created_by / day_of_week 等全靠它，
+    #                 否则 Java 会输出 camelCase，前端全部读不到
+    default-property-inclusion: always
+    property-naming-strategy: SNAKE_CASE
+
+orbit:
+  jwt:
+    # 与 academic **同一个密钥**：一个服务签发，两个服务都认
+    secret: ${APP_SECRET_KEY:change_me}
+    ttl-seconds: ${TOKEN_TTL_SECONDS:28800}
+  scheduling:
+    # 与原 .env 保持一致
+    max-concurrent-schedules: ${MAX_CONCURRENT_SCHEDULES:2}
+    solver-workers: ${SCHEDULE_SOLVER_WORKERS:2}
+    lease-seconds: ${SCHEDULE_LEASE_SECONDS:300}
+    heartbeat-seconds: 15
+    time-limit-seconds: 60
+    # Redis 排课锁的 TTL（对应 Python 的 SCHEDULE_LOCK_SECONDS）
+    lock-seconds: ${SCHEDULE_LOCK_SECONDS:300}
+    # 求解工作进程地址（Phase 3 起生效）
+    worker-base-url: ${SOLVER_WORKER_URL:http://127.0.0.1:8084}
+  academic:
+    base-url: ${ACADEMIC_URL:http://127.0.0.1:8081}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,threaddump

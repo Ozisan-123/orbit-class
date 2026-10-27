@@ -1,0 +1,75 @@
+# Local secrets and certificates
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Java / Maven
+**/target/
+*.class
+*.jar
+
+# Node / Vite
+**/node_modules/
+**/dist/
+*.tsbuildinfo
+
+# Python legacy runtime
+**/__pycache__/
+*.py[cod]
+/backend/
+
+# IDE and OS
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Runtime data and logs
+*.log
+*.err
+*.db
+*.db-shm
+*.db-wal
+*.txt
+.tmp/
+tmp/
+output/
+backend-java/.runtime-logs/
+backend-java/.spike-libs/
+backend-java/.spike-out/
+backend-java/.spike-src/
+
+# Local-only material not required by the application
+/bank_schema/
+/com/
+/META-INF/
+/skill-build/
+/tools/
+*.pdf
+*.svg
+Auto-HL*.md
+BYTE_BACKEND_NETWORK_OS_ALGORITHM_GUIDE.md
+MYSQL_LEARN_CHEATSHEET.md
+PYTHON_BACKEND_INTERVIEW_GUIDE.md
+RESUME_PYTHON_INTERVIEW_QUESTION_BANK.md
+resume.md
+start-dev-python.cmd
+/BENCHMARK_REPORT.md
+/DEPLOYMENT.md
+/FULLSTACK_TEST_REPORT.md
+/PROJECT_WALKTHROUGH.md
+/TEST_AND_COST_REPORT.md
+/data_snapshot.json
+.github/modernize/
+backend-java/.github/modernize/
+backend-java/start-core-legacy.cmd
+docs/我的简历*.pdf
+docs/Python后端-*.md
+docs/TODO.md
+docs/*.html
+

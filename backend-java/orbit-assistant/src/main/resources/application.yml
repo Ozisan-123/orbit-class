@@ -1,0 +1,45 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: orbit-assistant
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:127.0.0.1}:${MYSQL_PORT:3306}/${MYSQL_DATABASE:orbit_schedule}?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    username: ${MYSQL_USER:orbit}
+    password: ${MYSQL_PASSWORD:orbit_change_me}
+  data:
+    redis:
+      url: ${REDIS_URL:redis://127.0.0.1:6379/0}
+  flyway:
+    table: flyway_schema_history_assistant
+    locations: classpath:db/migration/assistant
+    baseline-on-migrate: true
+    baseline-version: 0
+    baseline-description: "pre-existing shared schema (assistant owns only assistant_* tables)"
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+    default-property-inclusion: non_null
+
+orbit:
+  jwt:
+    secret: ${APP_SECRET_KEY:change_me}
+    ttl-seconds: ${JWT_TTL_SECONDS:28800}
+  assistant:
+    # 成本控制：按租户每日 token 预算，超预算降级为只读工具
+    daily-token-budget-per-org: ${ASSISTANT_DAILY_TOKEN_BUDGET:200000}
+    session-ttl-minutes: 30
+    max-concurrent-streams-per-org: 2
+    llm-api-key: ${LLM_API_KEY:}
+    llm-base-url: ${LLM_BASE_URL:https://api.openai.com}
+    llm-model: ${LLM_MODEL:gpt-4o-mini}
+  academic:
+    base-url: ${ACADEMIC_URL:http://127.0.0.1:8081}
+  scheduling:
+    base-url: ${SCHEDULING_URL:http://127.0.0.1:8083}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus

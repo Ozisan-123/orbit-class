@@ -1,0 +1,29 @@
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.classpath
+.project
+.settings/
+.vscode/
+
+# 本地配置（含真实密钥，不要提交）
+src/main/resources/application-local.yml
+src/main/resources/application-*.local.yml
+
+# 日志与临时产物
+*.log
+logs/
+
+# spike 用的临时 jar 与编译产物（可用 README 里的命令重新下载）
+.spike-libs/
+.spike-out/
+.spike-src/

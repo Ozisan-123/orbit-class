@@ -1,0 +1,741 @@
+{
+  "organizationId": 1,
+  "grades": [
+    {
+      "id": 1,
+      "name": "G1",
+      "periodsPerDay": {
+        "Mon": 6,
+        "Tue": 6,
+        "Wed": 6,
+        "Thu": 6,
+        "Fri": 6
+      }
+    },
+    {
+      "id": 2,
+      "name": "G2",
+      "periodsPerDay": {
+        "Mon": 6,
+        "Tue": 6,
+        "Wed": 6,
+        "Thu": 6,
+        "Fri": 6
+      }
+    }
+  ],
+  "classes": [
+    {
+      "id": 1,
+      "name": "C1",
+      "gradeId": 1
+    },
+    {
+      "id": 2,
+      "name": "C2",
+      "gradeId": 1
+    },
+    {
+      "id": 3,
+      "name": "C3",
+      "gradeId": 1
+    },
+    {
+      "id": 4,
+      "name": "C4",
+      "gradeId": 1
+    },
+    {
+      "id": 5,
+      "name": "C5",
+      "gradeId": 2
+    },
+    {
+      "id": 6,
+      "name": "C6",
+      "gradeId": 2
+    },
+    {
+      "id": 7,
+      "name": "C7",
+      "gradeId": 2
+    },
+    {
+      "id": 8,
+      "name": "C8",
+      "gradeId": 2
+    }
+  ],
+  "subjects": [
+    {
+      "id": 1,
+      "name": "S1",
+      "category": "major"
+    },
+    {
+      "id": 2,
+      "name": "S2",
+      "category": "major"
+    },
+    {
+      "id": 3,
+      "name": "S3",
+      "category": "major"
+    },
+    {
+      "id": 4,
+      "name": "S4",
+      "category": "major"
+    },
+    {
+      "id": 5,
+      "name": "S5",
+      "category": "minor"
+    },
+    {
+      "id": 6,
+      "name": "S6",
+      "category": "minor"
+    },
+    {
+      "id": 7,
+      "name": "S7",
+      "category": "minor"
+    },
+    {
+      "id": 8,
+      "name": "S8",
+      "category": "minor"
+    }
+  ],
+  "teachers": [
+    {
+      "id": 1,
+      "name": "T1",
+      "subjectId": 1,
+      "maxWeeklyHours": 18
+    },
+    {
+      "id": 2,
+      "name": "T2",
+      "subjectId": 1,
+      "maxWeeklyHours": 18
+    },
+    {
+      "id": 3,
+      "name": "T3",
+      "subjectId": 1,
+      "maxWeeklyHours": 18
+    },
+    {
+      "id": 4,
+      "name": "T4",
+      "subjectId": 1,
+      "maxWeeklyHours": 18
+    },
+    {
+      "id": 5,
+      "name": "T5",
+      "subjectId": 2,
+      "maxWeeklyHours": 18
+    },
+    {
+      "id": 6,
+      "name": "T6",
+      "subjectId": 2,
+      "maxWeeklyHours": 18
+    },
+    {
+      "id": 7,
+      "name": "T7",
+      "subjectId": 3,
+      "maxWeeklyHours": 18
+    },
+    {
+      "id": 8,
+      "name": "T8",
+      "subjectId": 3,
+      "maxWeeklyHours": 18
+    },
+    {
+      "id": 9,
+      "name": "T9",
+      "subjectId": 4,
+      "maxWeeklyHours": 18
+    },
+    {
+      "id": 10,
+      "name": "T10",
+      "subjectId": 4,
+      "maxWeeklyHours": 18
+    },
+    {
+      "id": 11,
+      "name": "T11",
+      "subjectId": 5,
+      "maxWeeklyHours": 18
+    },
+    {
+      "id": 12,
+      "name": "T12",
+      "subjectId": 5,
+      "maxWeeklyHours": 18
+    },
+    {
+      "id": 13,
+      "name": "T13",
+      "subjectId": 6,
+      "maxWeeklyHours": 18
+    },
+    {
+      "id": 14,
+      "name": "T14",
+      "subjectId": 6,
+      "maxWeeklyHours": 18
+    },
+    {
+      "id": 15,
+      "name": "T15",
+      "subjectId": 7,
+      "maxWeeklyHours": 18
+    },
+    {
+      "id": 16,
+      "name": "T16",
+      "subjectId": 7,
+      "maxWeeklyHours": 18
+    },
+    {
+      "id": 17,
+      "name": "T17",
+      "subjectId": 8,
+      "maxWeeklyHours": 18
+    },
+    {
+      "id": 18,
+      "name": "T18",
+      "subjectId": 8,
+      "maxWeeklyHours": 18
+    },
+    {
+      "id": 19,
+      "name": "T19",
+      "subjectId": 1,
+      "maxWeeklyHours": 18
+    },
+    {
+      "id": 20,
+      "name": "T20",
+      "subjectId": 1,
+      "maxWeeklyHours": 18
+    },
+    {
+      "id": 21,
+      "name": "T21",
+      "subjectId": 1,
+      "maxWeeklyHours": 18
+    },
+    {
+      "id": 22,
+      "name": "T22",
+      "subjectId": 1,
+      "maxWeeklyHours": 18
+    },
+    {
+      "id": 23,
+      "name": "T23",
+      "subjectId": 2,
+      "maxWeeklyHours": 18
+    },
+    {
+      "id": 24,
+      "name": "T24",
+      "subjectId": 2,
+      "maxWeeklyHours": 18
+    },
+    {
+      "id": 25,
+      "name": "T25",
+      "subjectId": 3,
+      "maxWeeklyHours": 18
+    },
+    {
+      "id": 26,
+      "name": "T26",
+      "subjectId": 3,
+      "maxWeeklyHours": 18
+    },
+    {
+      "id": 27,
+      "name": "T27",
+      "subjectId": 4,
+      "maxWeeklyHours": 18
+    },
+    {
+      "id": 28,
+      "name": "T28",
+      "subjectId": 4,
+      "maxWeeklyHours": 18
+    },
+    {
+      "id": 29,
+      "name": "T29",
+      "subjectId": 5,
+      "maxWeeklyHours": 18
+    },
+    {
+      "id": 30,
+      "name": "T30",
+      "subjectId": 5,
+      "maxWeeklyHours": 18
+    },
+    {
+      "id": 31,
+      "name": "T31",
+      "subjectId": 6,
+      "maxWeeklyHours": 18
+    },
+    {
+      "id": 32,
+      "name": "T32",
+      "subjectId": 6,
+      "maxWeeklyHours": 18
+    },
+    {
+      "id": 33,
+      "name": "T33",
+      "subjectId": 7,
+      "maxWeeklyHours": 18
+    },
+    {
+      "id": 34,
+      "name": "T34",
+      "subjectId": 7,
+      "maxWeeklyHours": 18
+    },
+    {
+      "id": 35,
+      "name": "T35",
+      "subjectId": 8,
+      "maxWeeklyHours": 18
+    },
+    {
+      "id": 36,
+      "name": "T36",
+      "subjectId": 8,
+      "maxWeeklyHours": 18
+    }
+  ],
+  "assignments": [
+    {
+      "classId": 1,
+      "subjectId": 1,
+      "teacherId": 1
+    },
+    {
+      "classId": 2,
+      "subjectId": 1,
+      "teacherId": 2
+    },
+    {
+      "classId": 3,
+      "subjectId": 1,
+      "teacherId": 3
+    },
+    {
+      "classId": 4,
+      "subjectId": 1,
+      "teacherId": 4
+    },
+    {
+      "classId": 1,
+      "subjectId": 2,
+      "teacherId": 5
+    },
+    {
+      "classId": 2,
+      "subjectId": 2,
+      "teacherId": 5
+    },
+    {
+      "classId": 3,
+      "subjectId": 2,
+      "teacherId": 5
+    },
+    {
+      "classId": 4,
+      "subjectId": 2,
+      "teacherId": 6
+    },
+    {
+      "classId": 1,
+      "subjectId": 3,
+      "teacherId": 7
+    },
+    {
+      "classId": 2,
+      "subjectId": 3,
+      "teacherId": 7
+    },
+    {
+      "classId": 3,
+      "subjectId": 3,
+      "teacherId": 7
+    },
+    {
+      "classId": 4,
+      "subjectId": 3,
+      "teacherId": 8
+    },
+    {
+      "classId": 1,
+      "subjectId": 4,
+      "teacherId": 9
+    },
+    {
+      "classId": 2,
+      "subjectId": 4,
+      "teacherId": 9
+    },
+    {
+      "classId": 3,
+      "subjectId": 4,
+      "teacherId": 9
+    },
+    {
+      "classId": 4,
+      "subjectId": 4,
+      "teacherId": 10
+    },
+    {
+      "classId": 1,
+      "subjectId": 5,
+      "teacherId": 11
+    },
+    {
+      "classId": 2,
+      "subjectId": 5,
+      "teacherId": 11
+    },
+    {
+      "classId": 3,
+      "subjectId": 5,
+      "teacherId": 11
+    },
+    {
+      "classId": 4,
+      "subjectId": 5,
+      "teacherId": 12
+    },
+    {
+      "classId": 1,
+      "subjectId": 6,
+      "teacherId": 13
+    },
+    {
+      "classId": 2,
+      "subjectId": 6,
+      "teacherId": 13
+    },
+    {
+      "classId": 3,
+      "subjectId": 6,
+      "teacherId": 13
+    },
+    {
+      "classId": 4,
+      "subjectId": 6,
+      "teacherId": 14
+    },
+    {
+      "classId": 1,
+      "subjectId": 7,
+      "teacherId": 15
+    },
+    {
+      "classId": 2,
+      "subjectId": 7,
+      "teacherId": 15
+    },
+    {
+      "classId": 3,
+      "subjectId": 7,
+      "teacherId": 15
+    },
+    {
+      "classId": 4,
+      "subjectId": 7,
+      "teacherId": 16
+    },
+    {
+      "classId": 1,
+      "subjectId": 8,
+      "teacherId": 17
+    },
+    {
+      "classId": 2,
+      "subjectId": 8,
+      "teacherId": 17
+    },
+    {
+      "classId": 3,
+      "subjectId": 8,
+      "teacherId": 17
+    },
+    {
+      "classId": 4,
+      "subjectId": 8,
+      "teacherId": 18
+    },
+    {
+      "classId": 5,
+      "subjectId": 1,
+      "teacherId": 19
+    },
+    {
+      "classId": 6,
+      "subjectId": 1,
+      "teacherId": 20
+    },
+    {
+      "classId": 7,
+      "subjectId": 1,
+      "teacherId": 21
+    },
+    {
+      "classId": 8,
+      "subjectId": 1,
+      "teacherId": 22
+    },
+    {
+      "classId": 5,
+      "subjectId": 2,
+      "teacherId": 23
+    },
+    {
+      "classId": 6,
+      "subjectId": 2,
+      "teacherId": 23
+    },
+    {
+      "classId": 7,
+      "subjectId": 2,
+      "teacherId": 23
+    },
+    {
+      "classId": 8,
+      "subjectId": 2,
+      "teacherId": 24
+    },
+    {
+      "classId": 5,
+      "subjectId": 3,
+      "teacherId": 25
+    },
+    {
+      "classId": 6,
+      "subjectId": 3,
+      "teacherId": 25
+    },
+    {
+      "classId": 7,
+      "subjectId": 3,
+      "teacherId": 25
+    },
+    {
+      "classId": 8,
+      "subjectId": 3,
+      "teacherId": 26
+    },
+    {
+      "classId": 5,
+      "subjectId": 4,
+      "teacherId": 27
+    },
+    {
+      "classId": 6,
+      "subjectId": 4,
+      "teacherId": 27
+    },
+    {
+      "classId": 7,
+      "subjectId": 4,
+      "teacherId": 27
+    },
+    {
+      "classId": 8,
+      "subjectId": 4,
+      "teacherId": 28
+    },
+    {
+      "classId": 5,
+      "subjectId": 5,
+      "teacherId": 29
+    },
+    {
+      "classId": 6,
+      "subjectId": 5,
+      "teacherId": 29
+    },
+    {
+      "classId": 7,
+      "subjectId": 5,
+      "teacherId": 29
+    },
+    {
+      "classId": 8,
+      "subjectId": 5,
+      "teacherId": 30
+    },
+    {
+      "classId": 5,
+      "subjectId": 6,
+      "teacherId": 31
+    },
+    {
+      "classId": 6,
+      "subjectId": 6,
+      "teacherId": 31
+    },
+    {
+      "classId": 7,
+      "subjectId": 6,
+      "teacherId": 31
+    },
+    {
+      "classId": 8,
+      "subjectId": 6,
+      "teacherId": 32
+    },
+    {
+      "classId": 5,
+      "subjectId": 7,
+      "teacherId": 33
+    },
+    {
+      "classId": 6,
+      "subjectId": 7,
+      "teacherId": 33
+    },
+    {
+      "classId": 7,
+      "subjectId": 7,
+      "teacherId": 33
+    },
+    {
+      "classId": 8,
+      "subjectId": 7,
+      "teacherId": 34
+    },
+    {
+      "classId": 5,
+      "subjectId": 8,
+      "teacherId": 35
+    },
+    {
+      "classId": 6,
+      "subjectId": 8,
+      "teacherId": 35
+    },
+    {
+      "classId": 7,
+      "subjectId": 8,
+      "teacherId": 35
+    },
+    {
+      "classId": 8,
+      "subjectId": 8,
+      "teacherId": 36
+    }
+  ],
+  "gradeSubjects": [
+    {
+      "gradeId": 1,
+      "subjectId": 1,
+      "weeklyHours": 5
+    },
+    {
+      "gradeId": 1,
+      "subjectId": 2,
+      "weeklyHours": 5
+    },
+    {
+      "gradeId": 1,
+      "subjectId": 3,
+      "weeklyHours": 5
+    },
+    {
+      "gradeId": 1,
+      "subjectId": 4,
+      "weeklyHours": 5
+    },
+    {
+      "gradeId": 1,
+      "subjectId": 5,
+      "weeklyHours": 2
+    },
+    {
+      "gradeId": 1,
+      "subjectId": 6,
+      "weeklyHours": 2
+    },
+    {
+      "gradeId": 1,
+      "subjectId": 7,
+      "weeklyHours": 2
+    },
+    {
+      "gradeId": 1,
+      "subjectId": 8,
+      "weeklyHours": 2
+    },
+    {
+      "gradeId": 2,
+      "subjectId": 1,
+      "weeklyHours": 5
+    },
+    {
+      "gradeId": 2,
+      "subjectId": 2,
+      "weeklyHours": 5
+    },
+    {
+      "gradeId": 2,
+      "subjectId": 3,
+      "weeklyHours": 5
+    },
+    {
+      "gradeId": 2,
+      "subjectId": 4,
+      "weeklyHours": 5
+    },
+    {
+      "gradeId": 2,
+      "subjectId": 5,
+      "weeklyHours": 2
+    },
+    {
+      "gradeId": 2,
+      "subjectId": 6,
+      "weeklyHours": 2
+    },
+    {
+      "gradeId": 2,
+      "subjectId": 7,
+      "weeklyHours": 2
+    },
+    {
+      "gradeId": 2,
+      "subjectId": 8,
+      "weeklyHours": 2
+    }
+  ],
+  "gradeFixedSlots": [
+    {
+      "gradeId": 1,
+      "subjectId": 1,
+      "day": 0,
+      "period": 0
+    }
+  ]
+}

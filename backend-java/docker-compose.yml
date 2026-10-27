@@ -1,0 +1,77 @@
+# 智能教务中台 · 本地基础设施
+#
+# 一条命令起基础设施：
+#     docker compose up -d
+#
+# ── 与历史容器的关系（重要）───────────────────────────────────────────────
+# 迁移前，MySQL/Redis 是手工 `docker run` 出来的容器（orbit-mysql / orbit-redis），
+# 数据放在**具名卷** orbit-mysql-data / orbit-redis-data 里。
+# 本文件用 `name:` 显式指定卷名，因此 compose 会**复用同一个卷**——
+# 容器被重建，数据不会丢，也不需要手工 dump/restore。
+#
+# 一次性切换（已经在本机执行过，新机器不需要）：
+#     docker rm -f orbit-mysql orbit-redis      # 只删容器，卷保留
+#     docker compose up -d                      # 用同一个卷重建
+#
+# ── 配置依据 ──────────────────────────────────────────────────────────────
+# 下面是按**原容器实际配置**对齐的，不是随手写的：
+#   · 原 MySQL 容器的 Cmd 只有 ["mysqld"]，没有任何自定义参数
+#     → 服务器默认排序规则就是 mysql:8.4 自带的 utf8mb4_0900_ai_ci。
+#       这里显式写出来是为了让默认值可见，值与原库保持一致
+#       （若写成 utf8mb4_unicode_ci，新表会与现有 16 张表不是同一个排序规则）。
+#   · REPEATABLE-READ 也是默认值，显式写出是因为条件 UPDATE 的裁决依赖 InnoDB 行锁，
+#     隔离级别属于「不能悄悄变」的东西。
+#   · Redis 原容器就是 redis-server --appendonly yes，照搬。
+#
+# ⚠ 下面这些口令是**本地开发专用**，值与项目根目录 .env 一致。
+#   注意：数据库已经初始化过时，MYSQL_* 这些变量会被 MySQL 忽略（只在首次初始化空
+#   数据目录时生效），所以重建容器不会改掉现有账号口令。生产必须用环境变量覆盖。
+
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: orbit-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-Root@2026}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-orbit_schedule}
+      MYSQL_USER: ${MYSQL_USER:-orbit}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-OrbitDev@2026}
+      TZ: UTC
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_0900_ai_ci
+      - --transaction-isolation=REPEATABLE-READ
+    ports:
+      - "3306:3306"
+    volumes:
+      - orbit-mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p${MYSQL_ROOT_PASSWORD:-Root@2026}"]
+      interval: 5s
+      timeout: 5s
+      retries: 24
+      start_period: 20s
+
+  redis:
+    image: redis:7-alpine
+    container_name: orbit-redis
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - orbit-redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+volumes:
+  # ⚠ name: 不能省 —— 否则 compose 会加项目名前缀（backend-java_orbit-mysql-data），
+  #    变成一个空的新卷，看起来「数据全没了」。
+  orbit-mysql-data:
+    name: orbit-mysql-data
+  orbit-redis-data:
+    name: orbit-redis-data

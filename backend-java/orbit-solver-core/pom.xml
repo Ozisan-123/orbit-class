@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.orbit</groupId>
+    <artifactId>orbit-parent</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>orbit-solver-core</artifactId>
+  <name>orbit-solver-core</name>
+  <description>
+    求解内核库（非可运行服务）：规则 schema 与编译、RuleContext、CP-SAT 建模、求解引擎。
+    被 orbit-scheduling（校验规则参数 + 向前端/助手提供 schema）与 orbit-solver-worker（真正求解）共同依赖，
+    保证"规则定义只有一份"，避免两个模块各写一套导致漂移。
+  </description>
+
+  <dependencies>
+    <!-- 只依赖求解内核与 JSON，刻意不引 Spring Boot starter、不引 MySQL -->
+    <dependency>
+      <groupId>com.google.ortools</groupId>
+      <artifactId>ortools-java</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+</project>

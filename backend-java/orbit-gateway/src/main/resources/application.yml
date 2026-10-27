@@ -1,0 +1,37 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: orbit-gateway
+  data:
+    redis:
+      url: ${REDIS_URL:redis://127.0.0.1:6379/0}
+  cloud:
+    gateway:
+      # Spring Cloud Gateway 5 将 WebFlux 服务端配置移到了 server.webflux 下。
+      server:
+        webflux:
+          routes:
+            - id: academic
+              uri: ${ACADEMIC_URL:http://127.0.0.1:8081}
+              predicates:
+                - Path=/api/auth/**,/api/users/**,/api/organizations/**,/api/grades/**,/api/classes/**,/api/subjects/**,/api/teachers/**,/api/assignments/**,/api/fixed-slots/**,/api/grade-subjects/**
+            - id: scheduling
+              uri: ${SCHEDULING_URL:http://127.0.0.1:8083}
+              predicates:
+                - Path=/api/schedule/**,/api/rules/**,/api/availability/**,/api/system/**
+            - id: assistant
+              uri: ${ASSISTANT_URL:http://127.0.0.1:8085}
+              predicates:
+                - Path=/api/assistant/**
+
+orbit:
+  jwt:
+    secret: ${APP_SECRET_KEY:change_me}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus

@@ -1,0 +1,75 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: orbit-academic
+  datasource:
+    # ⚠ characterEncoding 必须是 **Java 字符集名**（UTF-8），不是 MySQL 的名字（utf8mb4）。
+    #   写成 utf8mb4 会直接连不上：Unsupported character encoding 'utf8mb4'。
+    #   utf8mb4 靠 connectionCollation 指定（4 字节字符支持）。
+    #   TODO(P1)：datetime 的时区语义要与 Python 侧逐一对齐后再定 serverTimezone。
+    url: jdbc:mysql://${MYSQL_HOST:127.0.0.1}:${MYSQL_PORT:3306}/${MYSQL_DATABASE:orbit_schedule}?useUnicode=true&characterEncoding=UTF-8&connectionCollation=utf8mb4_0900_ai_ci&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: ${MYSQL_USER:orbit}
+    password: ${MYSQL_PASSWORD:orbit_change_me}
+    hikari:
+      pool-name: academic-pool
+      maximum-pool-size: 10
+      minimum-idle: 2
+  data:
+    redis:
+      url: ${REDIS_URL:redis://127.0.0.1:6379/0}
+  flyway:
+    # 微服务共享一个库时，每个服务用独立 history 表，各自管自己的表
+    table: flyway_schema_history_academic
+    locations: classpath:db/migration/academic
+    #
+    # ⚠ 这两个值不能随便改，它们是「共享库 + 按属主拆表」下唯一能同时满足四种情况
+    #   的组合。踩过的两个坑：
+    #
+    #   坑 1：关闭 baseline-on-migrate
+    #     → Flyway 的安全检查会直接拒绝启动：
+    #       "Found non-empty schema(s) but no schema history table."
+    #       因为共享库里 schema 非空（别服务的表）而本服务还没有 history 表。
+    #
+    #   坑 2：baseline-on-migrate: true + baseline-version: 1（Flyway 默认值）
+    #     → 基线会把「版本 ≤ 1」的迁移全部视为已应用，于是 V1 被**静默跳过**：
+    #       表根本没建，却不报错，只多出一张空的 history 表。
+    #
+    #   正解：baseline-on-migrate: true + baseline-version: 0
+    #     基线只抑制版本 ≤ 0 的迁移，V1 照常执行；而 V1 写成幂等脚本
+    #     （CREATE TABLE IF NOT EXISTS），在已有表上就是 no-op。四种情况都对：
+    #       · 现有库（16 张表已在）        → 基线 0，V1 空跑，记录为已应用
+    #       · 全新空库（academic 先起）    → 无基线，V1 建 10 张表
+    #       · 全新空库（scheduling 后起）  → 基线 0，V1 建自己的 6 张表
+    #       · 顺序颠倒（scheduling 先起）  → V1 因外键指向不存在的表而**响亮失败**
+    baseline-on-migrate: true
+    baseline-version: 0
+    baseline-description: "pre-existing shared schema (other service owns the tables)"
+  jackson:
+    # ⚠ 必须是 always（默认），不能是 non_null。
+    #   实测 Python 侧是**包含 null 字段**的，例如：
+    #     {"id":2,...,"created_by":1,"published_by":null,...}
+    #   写成 non_null 会把它们悄悄删掉 → 契约对不上，而且前端读 undefined 与 null 的行为不同。
+    default-property-inclusion: always
+    # 全 API 用 snake_case（Python 侧的既有风格）。
+    # 这样 Java 里字段写 organizationId，JSON 自动输出 organization_id，
+    # 不用在每个 DTO 上贴 @JsonProperty —— 一处配置解决全部字段命名。
+    property-naming-strategy: SNAKE_CASE
+
+orbit:
+  jwt:
+    # 与 Python 的 SECRET_KEY 同源（.env 的 APP_SECRET_KEY）。实测 49 字节，满足 HS256 的 ≥32 字节要求
+    secret: ${APP_SECRET_KEY:change_me}
+    # ⚠ 对齐 Python 的 TOKEN_TTL_SECONDS 默认值 28800（8 小时）。
+    #   原来这里写 43200(12h) 与 Python 不一致 —— 同一份配置、同样登录一次，
+    #   Java 侧有效期比 Python 长 4 小时，是没必要的**行为差异**。
+    ttl-seconds: ${TOKEN_TTL_SECONDS:28800}
+  tenant:
+    default-organization-id: 1
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,threaddump,heapdump

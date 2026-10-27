@@ -1,0 +1,136 @@
+body {
+  margin: 0;
+  background: #f5f7fa;
+}
+
+.schedule-table .ant-table-cell {
+  padding: 5px !important;
+}
+
+.schedule-cell {
+  display: grid;
+  place-items: stretch;
+  border: 2px dashed transparent;
+  border-radius: 9px;
+  padding: 2px;
+  transition: background 160ms ease, border-color 160ms ease;
+}
+
+.schedule-cell-over {
+  border-color: #1677ff;
+  background: #e6f4ff;
+}
+
+.schedule-course {
+  position: relative;
+  height: 100%;
+  min-height: inherit;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid #e5e7eb;
+  border-left-width: 4px;
+  border-radius: 8px;
+  background: #fff;
+  padding: 5px 8px;
+  box-sizing: border-box;
+  transition: transform 140ms ease, box-shadow 140ms ease, opacity 140ms ease;
+}
+
+.schedule-course-editable {
+  cursor: grab;
+}
+
+.schedule-course-editable:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 16px rgba(22, 119, 255, 0.18);
+}
+
+.schedule-course-selected {
+  outline: 3px solid rgba(22, 119, 255, 0.28);
+  box-shadow: 0 0 0 1px #1677ff, 0 5px 16px rgba(22, 119, 255, 0.2);
+}
+
+.schedule-course-editable:active {
+  cursor: grabbing;
+}
+
+.schedule-course-dragging {
+  opacity: 0.4;
+}
+
+.schedule-drag-handle {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  color: #8c8c8c;
+  font-size: 11px;
+}
+
+.schedule-subject {
+  font-weight: 650;
+  color: #1f2937;
+}
+
+.schedule-teacher {
+  margin-top: 2px;
+  font-size: 12px;
+  color: #667085;
+}
+
+.schedule-empty {
+  align-self: center;
+  color: #bfbfbf;
+  font-size: 12px;
+}
+
+.schedule-row-alt > td {
+  background: #fafcff !important;
+}
+
+.version-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  border: 1px solid #e8edf3;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f8fbff 0%, #fff 65%);
+}
+
+.fixed-slot-cell {
+  width: 100%;
+  min-height: 62px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 6px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+  background: #fff;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.fixed-slot-cell:hover {
+  border-color: #1677ff;
+  background: #f0f7ff;
+  color: #1677ff;
+}
+
+.fixed-slot-cell-active {
+  border-style: solid;
+  border-color: #fa8c16;
+  background: #fff7e6;
+  color: #ad4e00;
+}
+
+.fixed-slot-cell small {
+  color: #64748b;
+}

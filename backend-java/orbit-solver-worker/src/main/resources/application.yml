@@ -1,0 +1,50 @@
+server:
+  # 内部端口：worker 不对外提供业务接口，只暴露 actuator 供 Prometheus 抓取
+  port: 8084
+
+spring:
+  application:
+    name: orbit-solver-worker
+  main:
+    banner-mode: off
+  jackson:
+    # ⚠ 必须与 scheduling 一致：两边靠 JSON 通信，命名策略不一致会导致
+    #    "字段全变 null" 这种很难查的问题（不报错，只是取不到值）
+    property-naming-strategy: SNAKE_CASE
+    default-property-inclusion: always
+    deserialization:
+      # ⚠⚠ Spring Boot 4 用的是 **Jackson 3**（包名 tools.jackson），
+      #    而它**默认对"primitive 字段收到 null"直接抛异常**
+      #    （Jackson 2 是容忍的）。scheduling 侧用的是 Jackson 2
+      #    （com.fasterxml.jackson，为了那批 JacksonTypeHandler），
+      #    于是"发得出去、收不进来"：
+      #       Cannot map `null` into type `long`
+      #    而快照里确实有可空列（例如 grade_subjects.weekly_hours 理论上可空），
+      #    所以这不是"发错了"，而是**接收方太严**。
+      #    根治办法是把 DTO 里可能为空的字段改成包装类型（Long/Integer），
+      #    这里先按"宽容"对齐 Jackson 2 的行为，避免版本差异变成契约差异。
+      fail-on-null-for-primitives: false
+
+orbit:
+  worker:
+    # ⚠ 键名必须与 WorkerProperties 的字段一一对应。
+    #   Spring 默认**静默忽略**认不出来的键 —— 写错了不报错，
+    #   只是悄悄用默认值。这个文件原来的占位版本就踩了这个坑：
+    #   里面写的是 poll-interval-seconds / max-concurrent-solves，
+    #   而实际的属性名是 poll-interval-ms / concurrency，一个都没绑上。
+    scheduling-base-url: ${SCHEDULING_URL:http://127.0.0.1:8083}
+    secret: ${WORKER_SHARED_SECRET:orbit-dev-worker}
+    # id 留空则由代码生成（带进程号）—— 多副本部署时不能互相冒充
+    concurrency: ${WORKER_CONCURRENCY:1}
+    poll-interval-ms: 2000
+    time-limit-seconds: ${SCHEDULE_TIME_LIMIT:60}
+    num-search-workers: ${SCHEDULE_SOLVER_WORKERS:2}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  metrics:
+    tags:
+      application: orbit-solver-worker
